@@ -2,8 +2,6 @@ package com.kravets.quiz;
 
 import android.os.Bundle;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -32,15 +30,6 @@ public class StatisticsFragment extends Fragment {
         dbHelper.close();
 
         for (Result el : resultsList) {
-//            TextView textView = new TextView(getActivity());
-//
-//            textView.setText(String.format("%s (%d)", el.getName(), el.getCorrectAnswers()));
-//            textView.setTextSize(28);
-//            textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-//
-//            linearLayout.addView(textView);
-
-
             TableRow layout = new TableRow(getActivity());
             TextView textViewLeft = new TextView(getActivity());
             TextView textViewRight = new TextView(getActivity());

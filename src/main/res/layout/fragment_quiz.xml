@@ -9,12 +9,12 @@
     tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_top"
+        android:id="@+id/layoutTop"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintVertical_weight="2"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/layout_bottom">
+        app:layout_constraintBottom_toTopOf="@id/layoutBottom">
 
         <TextView
             android:id="@+id/questionNumber"
@@ -60,18 +60,16 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_bottom"
+        android:id="@+id/layoutBottom"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_top"
+        app:layout_constraintTop_toBottomOf="@id/layoutTop"
         app:layout_constraintVertical_weight="3">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button1"
             style="@style/ButtonsAnswerStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="Вариант 1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/button2"
@@ -81,8 +79,6 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button2"
             style="@style/ButtonsAnswerStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="Вариант 2"
             app:layout_constraintTop_toBottomOf="@id/button1"
             app:layout_constraintBottom_toTopOf="@id/button3"
@@ -92,8 +88,6 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button3"
             style="@style/ButtonsAnswerStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="Вариант 3"
             app:layout_constraintTop_toBottomOf="@id/button2"
             app:layout_constraintBottom_toTopOf="@id/button4"
@@ -103,8 +97,6 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button4"
             style="@style/ButtonsAnswerStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="Вариант 4"
             app:layout_constraintTop_toBottomOf="@id/button3"
             app:layout_constraintBottom_toBottomOf="parent"

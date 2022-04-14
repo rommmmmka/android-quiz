@@ -1,21 +1,22 @@
 package com.kravets.quiz;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Question {
-    private String question, answer1, answer2, answer3, answer4;
-    private int correctAnswerId;
+    private String question;
+    private ArrayList<Answer> answers;
 
     public Question() {}
 
-    public Question(String question, String answer1, String answer2, String answer3, String answer4, int correctAnswerId) {
+    public Question(String question, String ... answers) {
         this.question = question;
-        this.answer1 = answer1;
-        this.answer2 = answer2;
-        this.answer3 = answer3;
-        this.answer4 = answer4;
-        this.correctAnswerId = correctAnswerId;
+        this.answers = new ArrayList<>();
+        for (String el: answers) {
+            if (!el.equals(""))
+                this.answers.add(new Answer(el, this.answers.isEmpty()));
+            else
+                this.answers.add(new Answer("", false));
+        }
     }
 
     public String getQuestion() {
@@ -26,43 +27,7 @@ public class Question {
         this.question = question;
     }
 
-    public String getAnswer1() {
-        return answer1;
-    }
-
-    public void setAnswer1(String answer1) {
-        this.answer1 = answer1;
-    }
-
-    public String getAnswer2() {
-        return answer2;
-    }
-
-    public void setAnswer2(String answer2) {
-        this.answer2 = answer2;
-    }
-
-    public String getAnswer3() {
-        return answer3;
-    }
-
-    public void setAnswer3(String answer3) {
-        this.answer3 = answer3;
-    }
-
-    public String getAnswer4() {
-        return answer4;
-    }
-
-    public void setAnswer4(String answer4) {
-        this.answer4 = answer4;
-    }
-
-    public int getCorrectAnswerId() {
-        return correctAnswerId;
-    }
-
-    public void setCorrectAnswerId(int correctAnswerId) {
-        this.correctAnswerId = correctAnswerId;
+    public ArrayList<Answer> getAnswers() {
+        return answers;
     }
 }

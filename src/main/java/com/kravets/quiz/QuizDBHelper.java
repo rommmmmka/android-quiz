@@ -60,11 +60,8 @@ public class QuizDBHelper extends SQLiteOpenHelper {
     private void addQuestion(Question question) {
         ContentValues cv = new ContentValues();
         cv.put(QuestionsTable.COLUMN_QUESTION, question.getQuestion());
-        cv.put(QuestionsTable.COLUMN_OPTION1, question.getAnswer1());
-        cv.put(QuestionsTable.COLUMN_OPTION2, question.getAnswer2());
-        cv.put(QuestionsTable.COLUMN_OPTION3, question.getAnswer3());
-        cv.put(QuestionsTable.COLUMN_OPTION4, question.getAnswer4());
-        cv.put(QuestionsTable.COLUMN_ANSWER_NUMBER, question.getCorrectAnswerId());
+        for (int i = 0; i < QuestionsTable.OPTIONS.length; i++)
+            cv.put(QuestionsTable.OPTIONS[i], question.getAnswers().get(i).getAnswer());
         db.insert(QuestionsTable.TABLE_NAME, null, cv);
     }
 
@@ -76,12 +73,26 @@ public class QuizDBHelper extends SQLiteOpenHelper {
     }
 
     private void fillQuestionsTable() {
-        Question q1 = new Question("1", "2", "3", "4", "5", 1);
+        Question q1 = new Question("Что из этого верно для списков в Python?", "Не существует ограничения на размер списка", "Список может содержать объекты любого типа, кроме другого списка", "Все элементы в списке должны быть одного типа", "Объекты в списке уникальны и не могут повторяться");
         addQuestion(q1);
-        Question q2 = new Question("2", "9", "8", "7", "6", 1);
+        Question q2 = new Question("a = ['a', 'b', 'c', 'd']\nЧто выведет команда print(a[-1])?", "d", "a", "Появиться ошибка выхода за пределы массива", "c");
         addQuestion(q2);
-        Question q3 = new Question("7", "343", "25325", "1364", "3426326", 1);
+        Question q3 = new Question("Что выведет команда print(9 / 2)", "4.5", "4", "5", "0");
         addQuestion(q3);
+        Question q4 = new Question("Какой из перечисленных операторов имеет наименьший приоритет?", "and", "%", "+", "**");
+        addQuestion(q4);
+        Question q5 = new Question("Чему равно значение выражения 1 + 2 ** 3 * 4?", "33", "4097", "36", "25");
+        addQuestion(q5);
+        Question q6 = new Question("Что делает команда map()?", "Обрабатывает элементы в итерируемом объекте с использованием заданной функции", "Создаёт пустой ассоциативный массив (словарь)", "Разбивает строку на подстроки", "Генерирует ряд последовательных чисел в заданном диапазоне");
+        addQuestion(q6);
+        Question q7 = new Question("s1 = 'a'\ns2 = 'b'\ns3 = 'c'\nprint(s1.join([s2, s3]))\nЧто будет выведено в консоль?", "bac", "Сообщение об ошибке", "abc", "['a', 'b', 'c']");
+        addQuestion(q7);
+        Question q8 = new Question("Какой из следующих стилей рекомендуется использовать, чтобы давать переменным имена, состоящие из нескольких слов?", "multi_word_variable_name\n(Snake Case)", "MultiWordVariableName\n(Pascal Case)", "multiWordVariableName\n(Camel Case)", "");
+        addQuestion(q8);
+        Question q9 = new Question("print({1, 3, 2} & set('qux'))\nЧто будет выведено в консоль?", "set()", "{}", "{1, 2, 3, 'q', 'x', 'u'}", "Сообщение об ошибке");
+        addQuestion(q9);
+        Question q10 = new Question("Что из этого неверно?", "s[::-1][::-1] is s", "s[::-1][::-1] == s", "s[:] == s", "s[:] is s");
+        addQuestion(q10);
     }
 
     @SuppressLint("Range")
@@ -108,13 +119,12 @@ public class QuizDBHelper extends SQLiteOpenHelper {
 
         if (c.moveToFirst()) {
             do {
-                Question question = new Question();
-                question.setQuestion(c.getString(c.getColumnIndex(QuestionsTable.COLUMN_QUESTION)));
-                question.setAnswer1(c.getString(c.getColumnIndex(QuestionsTable.COLUMN_OPTION1)));
-                question.setAnswer2(c.getString(c.getColumnIndex(QuestionsTable.COLUMN_OPTION2)));
-                question.setAnswer3(c.getString(c.getColumnIndex(QuestionsTable.COLUMN_OPTION3)));
-                question.setAnswer4(c.getString(c.getColumnIndex(QuestionsTable.COLUMN_OPTION4)));
-                question.setCorrectAnswerId(c.getInt(c.getColumnIndex(QuestionsTable.COLUMN_ANSWER_NUMBER)));
+                Question question = new Question(
+                    c.getString(c.getColumnIndex(QuestionsTable.COLUMN_QUESTION)),
+                    c.getString(c.getColumnIndex(QuestionsTable.COLUMN_OPTION1)),
+                    c.getString(c.getColumnIndex(QuestionsTable.COLUMN_OPTION2)),
+                    c.getString(c.getColumnIndex(QuestionsTable.COLUMN_OPTION3)),
+                    c.getString(c.getColumnIndex(QuestionsTable.COLUMN_OPTION4)));
                 questionsList.add(question);
             } while (c.moveToNext());
         }

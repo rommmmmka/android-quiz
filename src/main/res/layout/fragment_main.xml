@@ -17,8 +17,6 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonStart"
             style="@style/ButtonsMainMenuStyle"
-            android:layout_width="238dp"
-            android:layout_height="75dp"
             android:text="Начать"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/buttonStatistics"
@@ -29,8 +27,6 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonStatistics"
             style="@style/ButtonsMainMenuStyle"
-            android:layout_width="238dp"
-            android:layout_height="75dp"
             android:text="Статистика"
             app:layout_constraintTop_toBottomOf="@+id/buttonStart"
             app:layout_constraintBottom_toTopOf="@id/buttonExit"
@@ -41,8 +37,6 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonExit"
             style="@style/ButtonsMainMenuStyle"
-            android:layout_width="238dp"
-            android:layout_height="75dp"
             android:text="Выход"
             app:layout_constraintTop_toBottomOf="@+id/buttonStatistics"
             app:layout_constraintBottom_toBottomOf="parent"

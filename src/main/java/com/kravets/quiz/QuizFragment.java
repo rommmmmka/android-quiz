@@ -1,13 +1,11 @@
 package com.kravets.quiz;
 
-import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +15,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class QuizFragment extends Fragment {
+    private ConstraintLayout layoutBottom;
     private TextView questionNumber, scoreCounter, questionText, correctOrNotMessage;
     private AppCompatButton button1, button2, button3, button4;
+    private AppCompatButton[] buttons;
 
     private ArrayList<Question> questionsList;
-    private int currentQuestionNumber, totalQuestionsNumber, questionsCorrect, questionsWrong;
+    private int currentQuestionNumber, totalQuestionsNumber, questionsCorrect, questionsWrong, correctAnswerId;
     private Question currentQuestion;
+    private ArrayList<Answer> currentQuestionAnswers;
 
     private boolean rightAnswer;
 
@@ -32,6 +33,7 @@ public class QuizFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_quiz, container, false);
 
+        layoutBottom = view.findViewById(R.id.layoutBottom);
         questionNumber = view.findViewById(R.id.questionNumber);
         scoreCounter = view.findViewById(R.id.scoreCounter);
         questionText = view.findViewById(R.id.questionText);
@@ -40,6 +42,7 @@ public class QuizFragment extends Fragment {
         button2 = view.findViewById(R.id.button2);
         button3 = view.findViewById(R.id.button3);
         button4 = view.findViewById(R.id.button4);
+        buttons = new AppCompatButton[]{button1, button2, button3, button4};
 
         QuizDBHelper dbHelper = new QuizDBHelper(getActivity());
         questionsList = dbHelper.getAllQuestions();
@@ -63,17 +66,25 @@ public class QuizFragment extends Fragment {
     private void showNextQuestion() {
         if (currentQuestionNumber < totalQuestionsNumber) {
             currentQuestion = questionsList.get(currentQuestionNumber);
+
+            currentQuestionAnswers = currentQuestion.getAnswers();
+            Collections.shuffle(currentQuestionAnswers);
             questionText.setText(currentQuestion.getQuestion());
-            button1.setText(currentQuestion.getAnswer1());
-            button2.setText(currentQuestion.getAnswer2());
-            button3.setText(currentQuestion.getAnswer3());
-            button4.setText(currentQuestion.getAnswer4());
+            for (int i = 0; i < currentQuestionAnswers.size(); i++) {
+                if (currentQuestionAnswers.get(i).getAnswer() == "")
+                    buttons[i].setVisibility(View.GONE);
+                else
+                    buttons[i].setVisibility(View.VISIBLE);
+                    buttons[i].setText(currentQuestionAnswers.get(i).getAnswer());
+                    if (currentQuestionAnswers.get(i).isCorrect())
+                        correctAnswerId = i;
+            }
             rightAnswer = false;
 
             View.OnClickListener onClickBtn = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int correctAnswerButton = new int[] {R.id.button1, R.id.button2, R.id.button3, R.id.button4}[currentQuestion.getCorrectAnswerId() - 1];
+                    int correctAnswerButton = new int[] {R.id.button1, R.id.button2, R.id.button3, R.id.button4}[correctAnswerId];
                     if (view.getId() == correctAnswerButton) {
                         questionsCorrect++;
                         rightAnswer = true;
