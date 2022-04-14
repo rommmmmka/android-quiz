@@ -26,16 +26,15 @@
     <style name="TextInfoStyle">
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textAlignment">center</item>
     </style>
 
-    <style name="TextQuestionStyle">
+    <style name="TextQuestionStyle" parent="TextInfoStyle">
         <item name="android:textSize">24sp</item>
-        <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextHeaderStyle">
+    <style name="TextHeaderStyle" parent="TextInfoStyle">
         <item name="android:textSize">36sp</item>
-        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

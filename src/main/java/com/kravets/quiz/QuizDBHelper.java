@@ -7,9 +7,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.kravets.quiz.QuizContract.*;
+import com.kravets.quiz.QuestionsContract.*;
+import com.kravets.quiz.ResultsContract.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class QuizDBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "quiz";
@@ -19,6 +21,7 @@ public class QuizDBHelper extends SQLiteOpenHelper {
 
     public QuizDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        db = getWritableDatabase();
 //        onUpgrade(this.getWritableDatabase(), 0, 0);
     }
 
@@ -34,8 +37,15 @@ public class QuizDBHelper extends SQLiteOpenHelper {
                 QuestionsTable.COLUMN_OPTION3 + " TEXT, " +
                 QuestionsTable.COLUMN_OPTION4 + " TEXT, " +
                 QuestionsTable.COLUMN_ANSWER_NUMBER + " INTEGER )";
-
         db.execSQL(SQL_CREATE_QUESTIONS_TABLE);
+
+        final String SQL_CREATE_RESULTS_TABLE = "CREATE TABLE " +
+                ResultsTable.TABLE_NAME + " ( " +
+                ResultsTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                ResultsTable.COLUMN_NAME + " TEXT, " +
+                ResultsTable.COLUMN_CORRECT_ANSWERS + " INTEGER )";
+
+        db.execSQL(SQL_CREATE_RESULTS_TABLE);
 
         fillQuestionsTable();
     }
@@ -43,6 +53,7 @@ public class QuizDBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         db.execSQL("DROP TABLE IF EXISTS " + QuestionsTable.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + ResultsTable.TABLE_NAME);
         onCreate(db);
     }
 
@@ -57,6 +68,13 @@ public class QuizDBHelper extends SQLiteOpenHelper {
         db.insert(QuestionsTable.TABLE_NAME, null, cv);
     }
 
+    public void addResult(Result result) {
+        ContentValues cv = new ContentValues();
+        cv.put(ResultsTable.COLUMN_NAME, result.getName());
+        cv.put(ResultsTable.COLUMN_CORRECT_ANSWERS, result.getCorrectAnswers());
+        db.insert(ResultsTable.TABLE_NAME, null, cv);
+    }
+
     private void fillQuestionsTable() {
         Question q1 = new Question("1", "2", "3", "4", "5", 1);
         addQuestion(q1);
@@ -66,9 +84,9 @@ public class QuizDBHelper extends SQLiteOpenHelper {
         addQuestion(q3);
     }
 
+    @SuppressLint("Range")
     public ArrayList<Question> getAllQuestions() {
         ArrayList<Question> questionsList = new ArrayList<>();
-        db = getReadableDatabase();
         String[] Projection = {
                 QuestionsTable._ID,
                 QuestionsTable.COLUMN_QUESTION,
@@ -103,5 +121,38 @@ public class QuizDBHelper extends SQLiteOpenHelper {
         c.close();
 
         return questionsList;
+    }
+
+    @SuppressLint("Range")
+    public ArrayList<Result> getAllResults() {
+        ArrayList<Result> resultsList = new ArrayList<>();
+        String[] Projection = {
+                ResultsTable._ID,
+                ResultsTable.COLUMN_NAME,
+                ResultsTable.COLUMN_CORRECT_ANSWERS,
+        };
+        Cursor c = db.query(
+                ResultsTable.TABLE_NAME,
+                Projection,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        if (c.moveToFirst()) {
+            do {
+                Result result = new Result();
+                result.setName(c.getString(c.getColumnIndex(ResultsTable.COLUMN_NAME)));
+                result.setCorrectAnswers(c.getInt(c.getColumnIndex(ResultsTable.COLUMN_CORRECT_ANSWERS)));
+                resultsList.add(result);
+            } while (c.moveToNext());
+        }
+        c.close();
+
+        Collections.sort(resultsList);
+
+        return resultsList;
     }
 }

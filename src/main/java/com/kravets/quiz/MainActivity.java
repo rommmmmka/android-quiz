@@ -15,9 +15,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainActivity, MainFragment.class, null)
+                .add(R.id.mainActivity, MainFragment.class, null)
                 .setReorderingAllowed(true)
-                .addToBackStack("nameInput") // name can be null
                 .commit();
 
     }

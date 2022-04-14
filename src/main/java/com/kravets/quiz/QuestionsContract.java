@@ -2,9 +2,9 @@ package com.kravets.quiz;
 
 import android.provider.BaseColumns;
 
-public final class QuizContract {
+public final class QuestionsContract {
 
-    public QuizContract() {}
+    public QuestionsContract() {}
 
     public static class QuestionsTable implements BaseColumns {
         public static final String TABLE_NAME = "questions";

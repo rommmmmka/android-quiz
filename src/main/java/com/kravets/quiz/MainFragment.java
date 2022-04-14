@@ -28,13 +28,16 @@ public class MainFragment extends Fragment {
             public void onClick(View view) {
                 switch (view.getId()) {
                     case R.id.buttonStart:
-                        getFragmentManager().beginTransaction()
+                        getParentFragmentManager().beginTransaction()
                                 .replace(R.id.mainActivity, QuizFragment.class, null)
-                                .setReorderingAllowed(true)
-                                .addToBackStack("nameInput") // name can be null
+                                .addToBackStack("2")
                                 .commit();
                         break;
                     case R.id.buttonStatistics:
+                        getParentFragmentManager().beginTransaction()
+                                .replace(R.id.mainActivity, StatisticsFragment.class, null)
+                                .addToBackStack("2")
+                                .commit();
                         break;
                     case R.id.buttonExit:
                         getActivity().finish();
@@ -49,11 +52,5 @@ public class MainFragment extends Fragment {
 
         return view;
 
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        getActivity().finish();
     }
 }

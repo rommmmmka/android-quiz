@@ -43,6 +43,7 @@ public class QuizFragment extends Fragment {
 
         QuizDBHelper dbHelper = new QuizDBHelper(getActivity());
         questionsList = dbHelper.getAllQuestions();
+        dbHelper.close();
 
         startQuiz();
 
@@ -56,20 +57,11 @@ public class QuizFragment extends Fragment {
         totalQuestionsNumber = questionsList.size();
         Collections.shuffle(questionsList);
 
-        showNextQuestion(false);
+        showNextQuestion();
     }
 
-    private void showNextQuestion(boolean displayCorrectOrNotMessage) {
+    private void showNextQuestion() {
         if (currentQuestionNumber < totalQuestionsNumber) {
-            if (displayCorrectOrNotMessage)
-                if (rightAnswer) {
-                    correctOrNotMessage.setTextColor(getResources().getColor(R.color.text_color_correct));
-                    correctOrNotMessage.setText("Верно :)");
-                } else {
-                    correctOrNotMessage.setTextColor(getResources().getColor(R.color.text_color_wrong));
-                    correctOrNotMessage.setText("Неверно :(");
-                }
-
             currentQuestion = questionsList.get(currentQuestionNumber);
             questionText.setText(currentQuestion.getQuestion());
             button1.setText(currentQuestion.getAnswer1());
@@ -85,13 +77,14 @@ public class QuizFragment extends Fragment {
                     if (view.getId() == correctAnswerButton) {
                         questionsCorrect++;
                         rightAnswer = true;
-                    }
-                    else
+                        correctOrNotMessage.setTextColor(getResources().getColor(R.color.text_color_correct));
+                        correctOrNotMessage.setText("Верно :)");
+                    } else {
                         questionsWrong++;
-
-
-
-                    showNextQuestion(true);
+                        correctOrNotMessage.setTextColor(getResources().getColor(R.color.text_color_wrong));
+                        correctOrNotMessage.setText("Неверно :(");
+                    }
+                    showNextQuestion();
                 }
             };
             button1.setOnClickListener(onClickBtn);
@@ -104,7 +97,10 @@ public class QuizFragment extends Fragment {
             questionNumber.setText(String.format("Вопрос: %d/%d", currentQuestionNumber, totalQuestionsNumber));
             scoreCounter.setText(String.format("Правильных: %d, неправильных: %d", questionsCorrect, questionsWrong));
         } else {
-
+            SaveFragment saveFragment = SaveFragment.newInstance(questionsCorrect, questionsWrong, rightAnswer);
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.mainActivity, saveFragment, null)
+                    .commit();
         }
     }
 }
